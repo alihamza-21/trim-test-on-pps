@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - dev
-  workflow_dispatch: # Add manual trigger for main branch
+  workflow_dispatch: # Add manual trigger
 
 jobs:
   build:
@@ -47,8 +47,8 @@ jobs:
       - name: Security Scan
         uses: zricethezav/gitleaks-action@v1.5.0
 
-  deploy_production:
-    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+  deploy_main:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Get latest code
@@ -63,7 +63,7 @@ jobs:
           server-dir: /home/pps507/production.pps507.com/
 
   deploy_dev:
-    if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/dev' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Get latest code
