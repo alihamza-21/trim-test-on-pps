@@ -3,6 +3,7 @@ name: CI/CD Workflow
 on:
   push:
     branches:
+      - main
       - dev
   workflow_dispatch: # Add manual trigger for main branch
 
