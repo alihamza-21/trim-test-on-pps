@@ -63,7 +63,6 @@ jobs:
           server-dir: /home/pps507/production.pps507.com/
 
   deploy_dev:
-    if: github.ref == 'refs/heads/dev' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Get latest code
