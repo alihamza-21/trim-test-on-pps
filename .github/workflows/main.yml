@@ -3,8 +3,8 @@ name: CI/CD Workflow
 on:
   push:
     branches:
-      - main
       - dev
+  workflow_dispatch: # Add manual trigger for main branch
 
 jobs:
   build:
@@ -47,7 +47,7 @@ jobs:
         uses: zricethezav/gitleaks-action@v1.5.0
 
   deploy_production:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Get latest code
@@ -59,6 +59,7 @@ jobs:
           server: ftp.pps507.com
           username: ${{ secrets.PRODUCTION_FTP_USERNAME }}
           password: ${{ secrets.PRODUCTION_FTP_PASSWORD }}
+          server-dir: /home/pps507/production.pps507.com/
 
   deploy_dev:
     if: github.ref == 'refs/heads/dev'
@@ -73,3 +74,4 @@ jobs:
           server: ftp.pps507.com
           username: ${{ secrets.DEV_FTP_USERNAME }}
           password: ${{ secrets.DEV_FTP_PASSWORD }}
+          server-dir: /home/pps507/dev.pps507.com/
