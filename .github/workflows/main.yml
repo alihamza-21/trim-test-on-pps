@@ -59,7 +59,7 @@ jobs:
           server: ftp.pps507.com
           username: ${{ secrets.DEV_FTP_USERNAME }}
           password: ${{ secrets.DEV_FTP_PASSWORD }}
-          server-dir: /home/pps507/dev.pps507.com/
+          server-dir: /
 
   deploy_main:
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
@@ -74,4 +74,4 @@ jobs:
           server: ftp.pps507.com
           username: ${{ secrets.PRODUCTION_FTP_USERNAME }}
           password: ${{ secrets.PRODUCTION_FTP_PASSWORD }}
-          server-dir: /home/pps507/production.pps507.com/
+          server-dir: /
