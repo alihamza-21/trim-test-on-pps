@@ -3,9 +3,8 @@ name: CI/CD Workflow
 on:
   push:
     branches:
-      - main
       - dev
-  workflow_dispatch: # Add manual trigger
+  workflow_dispatch: # Add manual trigger for main branch
 
 jobs:
   build:
@@ -47,22 +46,8 @@ jobs:
       - name: Security Scan
         uses: zricethezav/gitleaks-action@v1.5.0
 
-  deploy_main:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v2
-
-      - name: 📂 Sync files to production
-        uses: SamKirkland/FTP-Deploy-Action@v4.2.0
-        with:
-          server: ftp.pps507.com
-          username: ${{ secrets.PRODUCTION_FTP_USERNAME }}
-          password: ${{ secrets.PRODUCTION_FTP_PASSWORD }}
-          server-dir: /home/pps507/production.pps507.com/
-
   deploy_dev:
+    if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Get latest code
@@ -75,3 +60,18 @@ jobs:
           username: ${{ secrets.DEV_FTP_USERNAME }}
           password: ${{ secrets.DEV_FTP_PASSWORD }}
           server-dir: /home/pps507/dev.pps507.com/
+
+  deploy_main:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: 📂 Sync files to production
+        uses: SamKirkland/FTP-Deploy-Action@v4.2.0
+        with:
+          server: ftp.pps507.com
+          username: ${{ secrets.PRODUCTION_FTP_USERNAME }}
+          password: ${{ secrets.PRODUCTION_FTP_PASSWORD }}
+          server-dir: /home/pps507/production.pps507.com/
